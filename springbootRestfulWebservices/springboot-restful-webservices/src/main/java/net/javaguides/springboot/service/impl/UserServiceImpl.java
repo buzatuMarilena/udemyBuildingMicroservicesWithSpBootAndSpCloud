@@ -3,6 +3,8 @@ package net.javaguides.springboot.service.impl;
 import lombok.AllArgsConstructor;
 import net.javaguides.springboot.dto.UserDto;
 import net.javaguides.springboot.entity.User;
+import net.javaguides.springboot.exception.EmailAlreadyExistException;
+import net.javaguides.springboot.exception.ResourceNotFoundException;
 import net.javaguides.springboot.mapper.AutoUserMapper;
 import net.javaguides.springboot.mapper.UserMapper;
 import net.javaguides.springboot.repository.UserRepository;
@@ -19,13 +21,20 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    /** private ModelMapper modelMapper; --> inlocuiesc ModelMapper cu mapStruct */
+    /**
+     * private ModelMapper modelMapper; --> inlocuiesc ModelMapper cu mapStruct
+     */
 
     @Override
     public UserDto createUser(UserDto userDto) {
         // Convert UserDto info user jpa entity
         //User user = UserMapper.mapToUser(userDto); -> varianta fara modelMapper
         //User user = modelMapper.map(userDto, User.class); --> varianta fara mapStruct
+
+        Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
+        if(optionalUser.isPresent()){
+            throw new EmailAlreadyExistException("Email Already Exists for User "+ optionalUser.get().getFirstName());
+        }
 
         User user = AutoUserMapper.MAPPER.mapToUser(userDto);
         User savedUser = userRepository.save(user);
@@ -37,15 +46,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        User user = optionalUser.get();
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("id", "User", userId)
+        );
         //return UserMapper.mapToUserDto(user); -> varianta fara modelMapper
         return AutoUserMapper.MAPPER.mapToUserDto(user);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
-        List<User> users =  userRepository.findAll();
+        List<User> users = userRepository.findAll();
         //return users.stream().map(UserMapper::mapToUserDto).toList();-> varianta fara modelMapper
         return users.stream().map(AutoUserMapper.MAPPER::mapToUserDto).toList();
     }
