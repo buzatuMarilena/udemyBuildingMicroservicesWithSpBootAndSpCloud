@@ -3,12 +3,17 @@
 ### https://www.udemy.com/course/building-microservices-with-spring-boot-and-spring-cloud/?couponCode=ACCAGE0923
 *
 *
-# spring boot version 3.3.6
-# spring cloud 2023.0.x aka Leyton 	3.3.x, 3.2.x
+## spring boot version 3.3.6
+## spring cloud 2023.0.x aka Leyton 	3.3.x, 3.2.x
 *
 *
 *
-### microservices-docker-container - databaseMicroservicesDepartmentService 3308:3306 
-### microservices-docker-container2 - databaseMicroservicesEmployeeService 3309:3306 
-### microservices-docker-container3 - databaseMicroservicesOrganisationService 3310:3306
+#### microservices-docker-container - databaseMicroservicesDepartmentService 3308:3306 
+#### microservices-docker-container2 - databaseMicroservicesEmployeeService 3309:3306 
+#### microservices-docker-container3 - databaseMicroservicesOrganisationService 3310:3306
+*
+*
+*
+#### department-service port 8082
+#### employee-service port 8081
 
